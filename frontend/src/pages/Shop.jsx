@@ -13,6 +13,7 @@ export default function Shop() {
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
+    console.log('Shop API base URL:', API);
     fetch(`${API}/api/products`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to load products');
@@ -23,8 +24,9 @@ export default function Shop() {
         setProducts(Array.isArray(data) ? data : []);
         setError('');
       })
-      .catch(() => {
+      .catch((err) => {
         if (!isMounted) return;
+        console.error('Error loading products:', err);
         setError('Products could not be loaded. Please try again later.');
       })
       .finally(() => {
