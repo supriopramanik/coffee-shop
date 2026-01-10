@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext.jsx';
 
-const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const API = import.meta.env.VITE_API_BASE_URL || 'https://coffee-shop-bs3a.onrender.com';
 
 export default function Shop() {
   const [products, setProducts] = useState([]);

@@ -81,7 +81,7 @@ export default function Home(){
   );
 }
 
-const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const API = import.meta.env.VITE_API_BASE_URL || 'https://coffee-shop-bs3a.onrender.com';
 function FeaturedProducts(){
   const [data,setData]=useState([]);
   const [page,setPage]=useState(0);
