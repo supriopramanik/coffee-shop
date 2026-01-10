@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import connectDB from './src/config/db.js';
 import authRoutes from './src/routes/authRoutes.js';
+import adminAuthRoutes from './src/routes/adminAuthRoutes.js';
 import productRoutes from './src/routes/productRoutes.js';
 import orderRoutes from './src/routes/orderRoutes.js';
 import userRoutes from './src/routes/userRoutes.js';
@@ -39,6 +40,7 @@ app.get('/', (req, res) => {
   res.json({ message: "Drinkin' API is running" });
 });
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminAuthRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);

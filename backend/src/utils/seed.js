@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import connectDB from '../config/db.js';
 import Product from '../models/Product.js';
-import User from '../models/User.js';
+import Admin from '../models/Admin.js';
 
 dotenv.config();
 
@@ -38,10 +38,10 @@ const run = async () => {
       console.log('Products already exist, skipping');
     }
 
-    const adminExists = await User.findOne({ email: 'admin@drinkin.global' });
+    const adminExists = await Admin.findOne({ email: 'admin@drinkin.global' });
     if (!adminExists) {
-      await User.create({ name: 'Admin', email: 'admin@drinkin.global', password: 'Admin@123', isAdmin: true });
-      console.log('Created default admin (admin@drinkin.global / Admin@123)');
+      await Admin.create({ name: 'Admin', email: 'admin@drinkin.global', password: 'Admin@123' });
+      console.log('Created default admin (admin@drinkin.global / Admin@123) in admins collection');
     }
     await mongoose.connection.close();
     process.exit(0);

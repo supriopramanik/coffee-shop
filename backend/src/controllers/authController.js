@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 import User from '../models/User.js';
+import Admin from '../models/Admin.js';
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -32,19 +33,39 @@ export const register = asyncHandler(async (req, res) => {
 
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  // Try normal user first
   const user = await User.findOne({ email }).select('+password');
-  if (!user || !(await user.matchPassword(password))) {
+  if (user && (await user.matchPassword(password))) {
+    return res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone || '',
+      address: user.address || '',
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id)
+    });
+  }
+
+  // Fallback: check Admin collection
+  const admin = await Admin.findOne({ email }).select('+password');
+  if (!admin || !(await admin.matchPassword(password))) {
     res.status(401);
     throw new Error('Invalid email or password');
   }
-  res.json({
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    phone: user.phone || '',
-    address: user.address || '',
-    isAdmin: user.isAdmin,
-    token: generateToken(user._id)
+
+  const adminToken = jwt.sign({ id: admin._id, role: 'admin' }, process.env.JWT_SECRET, {
+    expiresIn: '7d'
+  });
+
+  return res.json({
+    _id: admin._id,
+    name: admin.name,
+    email: admin.email,
+    phone: '',
+    address: '',
+    isAdmin: true,
+    token: adminToken
   });
 });
 

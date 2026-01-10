@@ -3,7 +3,8 @@ import User from '../models/User.js';
 import Order from '../models/Order.js';
 
 export const listUsers = asyncHandler(async (req, res) => {
-  const users = await User.find().select('_id name email isAdmin createdAt');
+  // Only return non-admin users so admin accounts are not shown in the customers list
+  const users = await User.find({ isAdmin: false }).select('_id name email isAdmin createdAt');
   res.json(users);
 });
 

@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 import User from '../models/User.js';
+import Admin from '../models/Admin.js';
 
 export const protect = asyncHandler(async (req, res, next) => {
   let token;
@@ -15,10 +16,27 @@ export const protect = asyncHandler(async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decoded.id).select('-password');
-    if (!req.user) {
-      res.status(401);
-      throw new Error('User not found');
+    if (decoded.role === 'admin') {
+      const admin = await Admin.findById(decoded.id).select('-password');
+      if (!admin) {
+        res.status(401);
+        throw new Error('User not found');
+      }
+      // Normalize shape so downstream "admin" middleware works
+      req.user = {
+        _id: admin._id,
+        name: admin.name,
+        email: admin.email,
+        isAdmin: true,
+        createdAt: admin.createdAt,
+        updatedAt: admin.updatedAt
+      };
+    } else {
+      req.user = await User.findById(decoded.id).select('-password');
+      if (!req.user) {
+        res.status(401);
+        throw new Error('User not found');
+      }
     }
     next();
   } catch (error) {
