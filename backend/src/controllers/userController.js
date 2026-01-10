@@ -4,7 +4,16 @@ import Order from '../models/Order.js';
 
 export const listUsers = asyncHandler(async (req, res) => {
   // Only return non-admin users so admin accounts are not shown in the customers list
-  const users = await User.find({ isAdmin: false }).select('_id name email isAdmin createdAt');
+  const docs = await User.find({ isAdmin: false }).select('name email phone address isAdmin createdAt');
+  const users = docs.map(u => ({
+    _id: u._id,
+    name: u.name,
+    email: u.email,
+    phone: u.phone || '',
+    address: u.address || '',
+    isAdmin: u.isAdmin,
+    createdAt: u.createdAt
+  }));
   res.json(users);
 });
 

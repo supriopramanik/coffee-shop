@@ -429,7 +429,7 @@ img.responsive {
 /* extra-tight mobile adjustments */
 @media (max-width: 480px) {
     .container {
-        padding: 24px 6px;
+        padding: 0px 6px;
     }
     .nav .row {
         padding: 10px 0;

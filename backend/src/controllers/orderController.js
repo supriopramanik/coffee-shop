@@ -3,7 +3,7 @@ import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 
 export const createOrder = asyncHandler(async (req, res) => {
-  const { items } = req.body;
+  const { items, shippingAddress, phone } = req.body;
   if (!items || !Array.isArray(items) || items.length === 0) {
     res.status(400);
     throw new Error('No order items');
@@ -17,7 +17,13 @@ export const createOrder = asyncHandler(async (req, res) => {
     })
   );
   const total = populated.reduce((sum, i) => sum + i.price * i.qty, 0);
-  const order = await Order.create({ user: req.user._id, items: populated, total });
+  const order = await Order.create({
+    user: req.user._id,
+    shippingAddress: shippingAddress || req.user.address || '',
+    phone: phone || req.user.phone || '',
+    items: populated,
+    total
+  });
   res.status(201).json(order);
 });
 
@@ -30,7 +36,7 @@ export const myOrders = asyncHandler(async (req, res) => {
 
 export const allOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find()
-    .populate('user', 'name email')
+    .populate('user')
     .populate('items.product', 'imageUrl')
     .sort('-createdAt');
   res.json(orders);

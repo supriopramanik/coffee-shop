@@ -36,6 +36,13 @@ export default function AdminCustomers() {
     return { orderCount, productCount };
   }, [orders]);
 
+  const primaryAddress = selected
+    ? selected.address || (orders[0] && orders[0].shippingAddress) || ''
+    : '';
+  const primaryPhone = selected
+    ? selected.phone || (orders[0] && orders[0].phone) || ''
+    : '';
+
   return (
     <div className="card">
       <h2 style={{ marginTop: 0, marginBottom: 8 }}>Customers</h2>
@@ -106,6 +113,12 @@ export default function AdminCustomers() {
               </div>
               <div>
                 <strong>Email:</strong> {selected.email}
+              </div>
+              <div>
+                <strong>Phone:</strong> {primaryPhone || 'Not set'}
+              </div>
+              <div>
+                <strong>Address:</strong> {primaryAddress || 'Not set'}
               </div>
               <div>
                 <strong>Role:</strong> {selected.isAdmin ? 'Admin' : 'Customer'}

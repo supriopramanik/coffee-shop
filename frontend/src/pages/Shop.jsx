@@ -9,6 +9,7 @@ export default function Shop() {
   const [error, setError] = useState('');
   const { add } = useCart();
   const [selected, setSelected] = useState(null);
+  const [modalQty, setModalQty] = useState(1);
 
   useEffect(() => {
     let isMounted = true;
@@ -53,7 +54,7 @@ export default function Shop() {
             <div
               key={p._id}
               className="card product-card lift"
-              onClick={() => setSelected(p)}
+              onClick={() => { setSelected(p); setModalQty(1); }}
               style={{ cursor: 'pointer' }}
             >
               <img
@@ -121,10 +122,27 @@ export default function Shop() {
                 {selected.description}
               </p>
             )}
+            <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:16}}>
+              <button
+                className="btn secondary"
+                style={{padding:'4px 10px',minWidth:0}}
+                onClick={() => setModalQty(q => Math.max(1, q-1))}
+              >
+                -
+              </button>
+              <span>{modalQty}</span>
+              <button
+                className="btn secondary"
+                style={{padding:'4px 10px',minWidth:0}}
+                onClick={() => setModalQty(q => q+1)}
+              >
+                +
+              </button>
+            </div>
             <button
               className="btn"
               onClick={() => {
-                add(selected);
+                add(selected, modalQty);
                 setSelected(null);
               }}
             >

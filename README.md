@@ -100,11 +100,11 @@ npm run dev  # nodemon on :5000
 Set `.env`:
 ```
 PORT=5000
-MONGO_URI=mongodb+srv://suprio_admin:D7JC38lVbONULw0E@ekoncloude.zxrhbp4.mongodb.net/
+MONGO_URI=tour atlas url
 JWT_SECRET=change_me
 CLIENT_ORIGIN=http://localhost:5173
 ```
-Seed demo data (products + default admin `admin@drinkin.global` / `Admin@123`):
+Seed demo data (products + default admin `admin@drinkin.global` / `pass`):
 ```bash
 npm run seed
 ```
