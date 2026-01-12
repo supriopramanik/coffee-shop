@@ -45,7 +45,7 @@ export default function Shop() {
       <h1 className="text-center">Shop</h1>
       <p className="text-center">Browse our full range of Drinkin espresso pouches.</p>
 
-      {loading && <p>Loading products</p>}
+      {loading && <p>Loading products from our free API... Please wait a moment...</p>}
       {error && !loading && <p>{error}</p>}
 
       {!loading && !error && (
